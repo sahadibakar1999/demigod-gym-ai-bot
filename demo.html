@@ -14,7 +14,6 @@
   header p { margin:0; color:var(--dim); font-size:13px; }
   header button { margin-left:auto; }
   main { display:grid; grid-template-columns:390px 1fr; gap:24px; padding:24px; max-width:1200px; margin:0 auto; }
-  @media (max-width:860px) { main { grid-template-columns:1fr; padding:16px; } }
   h2 { font-size:12px; text-transform:uppercase; letter-spacing:1.5px; color:var(--gold); margin:0 0 10px; }
   button { background:var(--gold); color:#1a1206; border:0; border-radius:8px; padding:8px 14px; font-weight:600; cursor:pointer; font-size:13px; }
   button.ghost { background:transparent; color:var(--dim); border:1px solid var(--line); }
@@ -57,6 +56,26 @@
   .nudge { border-top:1px solid var(--line); padding:10px 0; font-size:13px; }
   .nudge p { margin:6px 0 0; white-space:pre-wrap; }
   .nudge small { color:var(--dim); }
+
+  /* mobile: one screen at a time, switched by tabs */
+  .tabs { display:none; }
+  @media (max-width:860px) {
+    header { padding:10px 14px; flex-wrap:nowrap; }
+    header button { padding:6px 10px; white-space:nowrap; }
+    header h1 { font-size:16px; }
+    header p { display:none; }
+    .tabs { display:flex; gap:8px; padding:10px 12px 0; }
+    .tabs button { flex:1; background:var(--panel); color:var(--dim); border:1px solid var(--line); padding:10px; }
+    .tabs button.on { background:var(--gold); color:#1a1206; border-color:var(--gold); }
+    main { display:block; padding:12px; }
+    section > h2 { display:none; }
+    body[data-tab=owner] #chatSec, body:not([data-tab=owner]) #ownerSec { display:none; }
+    .phone { height:calc(100dvh - 140px); min-height:380px; border-radius:16px; }
+    .m { max-width:90%; }
+    form input[type=text] { font-size:16px; }  /* stops iPhone zooming in on focus */
+    .card { padding:12px; }
+    table { min-width:420px; }
+  }
 </style>
 </head>
 <body>
@@ -67,9 +86,13 @@
   </div>
   <button class="ghost" id="reset">Reset demo</button>
 </header>
+<nav class="tabs">
+  <button data-t="chat" class="on">Customer chat</button>
+  <button data-t="owner">Owner view <span id="badge"></span></button>
+</nav>
 
 <main>
-  <section>
+  <section id="chatSec">
     <h2>Customer chat</h2>
     <div class="phone">
       <div class="wa-top"><div class="avatar">D</div><div><b>DemiGod Gym</b><small>AI assistant · replies instantly</small></div></div>
@@ -83,7 +106,7 @@
     </div>
   </section>
 
-  <section>
+  <section id="ownerSec">
     <div class="card">
       <h2>Owner alerts (sent to owner's WhatsApp)</h2>
       <div id="alerts"></div>
@@ -151,6 +174,7 @@ const statusTag = s => `<span class="tag ${s === "trial booked" ? "good" : s ===
 
 async function refresh() {
   const o = await (await fetch("/owner")).json();
+  $("badge").textContent = o.alerts.length ? "(" + o.alerts.length + ")" : "";
   $("alerts").innerHTML = o.alerts.length
     ? o.alerts.map(a => `<div class="alert"><small>${esc(a.at)}</small>${esc(a.text)}</div>`).join("")
     : '<div class="empty">No alerts yet. Book a trial or mention an injury in the chat.</div>';
@@ -192,6 +216,10 @@ $("reset").onclick = async () => {
   $("msgs").innerHTML = ""; $("nudges").innerHTML = "";
   hello(); refresh();
 };
+document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
+  document.body.dataset.tab = b.dataset.t;
+  document.querySelectorAll(".tabs button").forEach(x => x.classList.toggle("on", x === b));
+});
 const hello = () => bubble("bot", "Hi! 👋 Welcome to <b>DemiGod Gym</b>. Ask me about fees, book a free trial, get a workout + diet plan, or send a meal photo.");
 hello(); refresh();
 </script>
