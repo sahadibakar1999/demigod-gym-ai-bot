@@ -1,0 +1,8 @@
+.env
+venv/
+__pycache__/
+trials.csv
+.DS_Store
+leads.csv
+members.csv
+CLAUDE.md
