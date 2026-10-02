@@ -26,7 +26,7 @@ copy .env.example .env        (Mac/Linux: cp)
 python chat.py
 ```
 Try:
-- `fees kitni hai?`
+- `What are the fees?`
 - `I want to lose 5 kg, veg, can come 4 days a week. Give me a plan`
 - `Book a trial for Rahul, Monday 7 PM, boxing`
 - `I have knee pain, what should I do?`

@@ -46,7 +46,7 @@ YOUR JOBS:
    Add at the very end: [[COACH|short reason]]
 
 RULES:
-- Reply in the same language they use (English / Hindi / Hinglish).
+- Always reply in English only, even if they write in Hindi or Hinglish.
 - Short WhatsApp-style messages. Max 1-2 emojis. Friendly, never pushy.
 - WhatsApp formatting only: *bold* with single stars. No tables, no # headings, no **.
 - Never invent prices, timings, class slots, offers or phone numbers not in the gym info.
@@ -61,7 +61,7 @@ Reply in this short WhatsApp format:
 👉 Tip: <one simple tip to improve it for gym goals>
 Say these are estimates."""
 
-NUDGE_PROMPT = """Write one short WhatsApp message (under 80 words, max 1-2 emojis, Hinglish) from Demigod Gym.
+NUDGE_PROMPT = """Write one short WhatsApp message (under 80 words, max 1-2 emojis, plain English only) from Demigod Gym.
 Purpose: {purpose}
 Member: {name}, plan: {plan}, goal: {goal}. {detail}
 Warm and friendly, never pushy. Do not promise any discount or offer.
@@ -268,10 +268,10 @@ async def webhook(request: Request):
             data, mime = download_media(msg["image"]["id"])
             reply = handle(phone, name, image=(data, mime, msg["image"].get("caption", "")))
         else:
-            reply = "Abhi main text aur photos samajh sakta hoon 🙂 Please type your question."
+            reply = "I can only read text and photos right now 🙂 Please type your question."
     except Exception as e:
         print("ERROR:", e)
-        reply = "Sorry, thoda issue aa gaya. Our team will reply shortly."
+        reply = "Sorry, something went wrong. Our team will reply shortly."
         notify_owner(f"❌ Bot error for {phone}: {e}")
 
     send_wa(phone, reply)
@@ -296,7 +296,7 @@ def chat(b: dict = Body(...)):
     except Exception as e:
         print("ERROR:", e)
         notify_owner(f"❌ Bot error for {phone}: {e}")
-        return {"reply": "Sorry, thoda issue aa gaya. Our team will reply shortly."}
+        return {"reply": "Sorry, something went wrong. Our team will reply shortly."}
 
 
 @app.get("/owner")  # what the gym owner sees

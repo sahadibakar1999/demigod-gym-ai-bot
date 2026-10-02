@@ -108,7 +108,7 @@
 let PHONE = "919999999999";  // each browser gets its own chat
 try { PHONE = localStorage.demoPhone || (localStorage.demoPhone = "9199" + Math.floor(1e7 + Math.random() * 9e7)); } catch (e) {}
 const NAME = "Demo User";
-const CHIPS = ["fees kitni hai?", "Where is the gym?", "I want to lose 5 kg, veg, beginner, 4 days a week. Give me a plan",
+const CHIPS = ["What are the fees?", "Where is the gym?", "I want to lose 5 kg, veg, beginner, 4 days a week. Give me a plan",
                "Book a free trial for Rahul, Monday 7 PM, goal boxing", "I have knee pain, give me a workout"];
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
